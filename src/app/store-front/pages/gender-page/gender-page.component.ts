@@ -6,15 +6,19 @@ import { map } from 'rxjs';
 import { ProductCardComponent } from '@products/components/product-card/product-card.component';
 import { ProductsService } from '@products/services/products.service';
 import { TitleCasePipe } from '@angular/common';
+import { PaginationComponent } from '@shared/components/pagination/pagination.component';
+import { PaginationService } from '@shared/components/pagination/pagination.service';
 
 @Component({
   selector: 'app-gender-page',
   templateUrl: './gender-page.component.html',
-  imports: [ProductCardComponent, TitleCasePipe],
+  imports: [ProductCardComponent, TitleCasePipe, PaginationComponent],
 })
 export class GenderPageComponent {
 
   route = inject(ActivatedRoute);
+
+  paginationService = inject(PaginationService);
 
   // Magico isso (reativo): a mudanca na rota, automaticamente reflete em 'gender'
   gender = toSignal(
@@ -26,10 +30,14 @@ export class GenderPageComponent {
   productService = inject (ProductsService);
 
   productResource = rxResource({
-    request: () => ({gender: this.gender()}),
+    request: () => ({
+      gender: this.gender(),
+      page: this.paginationService.currentePage()-1
+    }),
     loader: ({request}) => {
       return this.productService.getProducts({
-        gender: request.gender
+        gender: request.gender,
+        offset: request.page * 9
       });
     }
 
