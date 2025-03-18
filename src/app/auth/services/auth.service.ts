@@ -18,7 +18,7 @@ export class AuthService {
 
   private _user = signal<User|null>(null);
 
-  private _token = signal<string|null>(null);
+  private _token = signal<string|null>(localStorage.getItem(TOKEN_KEY_STORE));
 
   private http = inject(HttpClient);
 
@@ -50,8 +50,14 @@ export class AuthService {
     );
   }
 
+  logout() {
+    this._user.set(null);
+    this._token.set(null);
+    this._authStatus.set('not-authenticated');
+    localStorage.removeItem(TOKEN_KEY_STORE);
+  }
+
   checkStatus(): Observable<boolean> {
-    console.log('chamou checkStatus');
 
     const token = localStorage.getItem(TOKEN_KEY_STORE);
     if (!token) {
@@ -59,23 +65,12 @@ export class AuthService {
       return of(false);
     }
     return this.http.get<AuthResponse>(`${baseUrl}/auth/check-status`, {
-      headers: {
-        Authorization: `Bearer ${token}`
-
-      }
     }).pipe(
       tap( resp => this.handleAuthSuccess(resp)),
       map( () => true),
       catchError( (error: any) => this.handleAuthError())
     );
 
-  }
-
-  logout() {
-    this._user.set(null);
-    this._token.set(null);
-    this._authStatus.set('not-authenticated');
-    localStorage.removeItem(TOKEN_KEY_STORE);
   }
 
   private handleAuthSuccess({token,user}: AuthResponse) {
