@@ -1,9 +1,12 @@
 <h2 class="text-3xl">Todos os produtos</h2>
 <h3 class="text-1xl mb-5">Para todos os gostos</h3>
 
-<app-pagination
-  [pages]="productResource.value()?.pages ?? 0"
-  [currentPage]="paginationService.currentePage()"/>
+<!-- trouxe esse class pra cah pq nao estava legal o visual quando product table usava esse componente -->
+<div class="mt-4 mb-4">
+  <app-pagination
+    [pages]="productResource.value()?.pages ?? 0"
+    [currentPage]="paginationService.currentePage()"/>
+</div>
 
 <div class="grid grid-col-1 md:grid-cols-2 ml:grid-cols-3 xl:grid-cols-5 gap-3">
   @for (item of productResource.value()?.products ?? []; track $index) {
