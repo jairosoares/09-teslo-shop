@@ -36,9 +36,11 @@ export class AuthService {
   })
 
 
-  usr = computed( () => this._user());
+  user = computed( () => this._user());
 
   token = computed( () => this._token());
+
+  isAdmin = computed( () => this._user()?.roles.includes('admin') ?? false);
 
   login(email: string, password: string): Observable<boolean> {
     return this.http.post<AuthResponse>(`${baseUrl}/auth/login`, {
@@ -64,6 +66,9 @@ export class AuthService {
       this.logout();
       return of(false);
     }
+
+    // TODO: nesse ponto, ele sugeriu usar o recurso de cache, pois varios locais esta usando isso
+
     return this.http.get<AuthResponse>(`${baseUrl}/auth/check-status`, {
     }).pipe(
       tap( resp => this.handleAuthSuccess(resp)),

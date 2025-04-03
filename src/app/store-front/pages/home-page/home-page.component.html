@@ -9,6 +9,6 @@
   @for (item of productResource.value()?.products ?? []; track $index) {
     <product-card [product]="item"/>
   } @empty {
-    <p>Não há produtos</p>
+    <p>Não há produtos [home-page]</p>
   }
 </div>
