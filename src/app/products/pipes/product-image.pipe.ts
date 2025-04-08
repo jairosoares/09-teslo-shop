@@ -9,7 +9,16 @@ const baseUrl = environment.baseUrl;
 
 export class ProductImagePipe implements PipeTransform {
 
-  transform(value: string | string[]): string {
+  transform(value: null | string | string[]): string {
+
+    if (value === null) {
+      return "./assets/images/no-image.jpg";
+    }
+
+    // para as imagens que foram adicionadas via file input select
+    if ( typeof value === 'string' && value.startsWith('blob:')) {
+      return value;
+    }
 
     if ( typeof value === 'string') {
       return `${baseUrl}/files/product/${value}`;

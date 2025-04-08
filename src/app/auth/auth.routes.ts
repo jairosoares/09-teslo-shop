@@ -10,10 +10,12 @@ export const authRoutes: Routes = [
     component: AuthLayoutComponent,
     children: [
       {
+        title: 'Login',
         path: 'login',
         component: LoginPageComponent,
       },
       {
+        title: 'Register',
         path: 'register',
         component: RegisterPageComponent,
       },

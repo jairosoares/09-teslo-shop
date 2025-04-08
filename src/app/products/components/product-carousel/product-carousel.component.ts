@@ -1,4 +1,4 @@
-import { AfterViewInit, Component, ElementRef, input, viewChild } from '@angular/core';
+import { AfterViewInit, Component, ElementRef, input, OnChanges, SimpleChanges, viewChild } from '@angular/core';
 
 import Swiper from 'swiper';
 import {Navigation, Pagination} from 'swiper/modules';
@@ -19,13 +19,25 @@ import { ProductImagePipe } from '@products/pipes/product-image.pipe';
   `,
   imports: [ProductImagePipe],
 })
-export class ProductCarouselComponent implements AfterViewInit{
+export class ProductCarouselComponent implements AfterViewInit, OnChanges {
 
   images = input.required<string []>();
 
   swiperDiv = viewChild.required<ElementRef>('swiperDiv');
 
+  ngOnChanges(changes: SimpleChanges): void {
+    if (changes['images'].firstChange) {
+      return;
+    }
+    this.swiperInit() ;
+  }
+
   ngAfterViewInit(): void {
+    this.swiperInit();
+  }
+
+  // tudo isso pq esse componente nao tem nativo Angular, somente typescript
+  swiperInit() {
     const element = this.swiperDiv().nativeElement;
 
     if (!element) return;

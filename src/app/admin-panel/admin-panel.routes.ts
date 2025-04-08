@@ -13,6 +13,7 @@ export const adminPanelRoutes: Routes = [
     ],
     children: [
       {
+        title: 'Produtos!',
         path: 'products',
         component: ProductAdminListPageComponent,
       },
